@@ -1,5 +1,5 @@
 //
-//  AladinEndpoint.swift
+//  AladinBookEndpoint.swift
 //  BookAnd
 //
 //  Created by Delma Song on 6/6/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AladinEndpoint: APIEndpoint {
+enum AladinBookEndpoint: APIEndpoint {
     /// 책 검색
 	/// - query: 검색어
 	/// - maxResults: 결과 갯수
