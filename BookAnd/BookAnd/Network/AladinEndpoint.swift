@@ -35,6 +35,7 @@ enum AladinEndpoint: APIEndpoint {
     
     var parameters: [String: Any]? {
         var params: [String: String] = [
+            "ttbkey": AppConfig.aladinTTBKey,
             "output": "js",
             "Version": "20131101",
             "cover": "big"
