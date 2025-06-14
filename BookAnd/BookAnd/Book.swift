@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BookResponse {
+struct BookResponse: Codable {
 	let books: [Book]
 	
 	enum CodingKeys: String, CodingKey {
@@ -15,11 +15,12 @@ struct BookResponse {
 	}
 }
 
-struct Book {
+struct Book: Equatable, Codable {
+	/// 도서 정보 구분짓는 유일키
+	let isbn13: String
 	let title: String
 	let publisher: String
 	let author: String
-	let isbn13: String
 	let coverImageURL: String
 	let categoryName: String
 	var categories: [String]
@@ -35,10 +36,11 @@ struct Book {
 	
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
+		
+		self.isbn13 = try container.decode(String.self, forKey: .isbn13)
 		self.title = try container.decode(String.self, forKey: .title)
 		self.publisher = try container.decode(String.self, forKey: .publisher)
 		self.author = try container.decode(String.self, forKey: .author)
-		self.isbn13 = try container.decode(String.self, forKey: .isbn13)
 		self.coverImageURL = try container.decode(String.self, forKey: .coverImageURL)
 		self.categoryName = try container.decode(String.self, forKey: .categoryName)
 		self.categories = self.categoryName.components(separatedBy: ">")
