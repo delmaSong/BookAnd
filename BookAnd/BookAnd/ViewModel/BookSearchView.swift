@@ -61,6 +61,11 @@ struct BookSearchView: View {
 					}
 				}
 				.listStyle(PlainListStyle())
+				.onAppear {
+					if let _ = viewModel.books.last {
+						loadMoreContent()
+					}
+				}
 			} else {
 				Spacer()
 			}
@@ -68,9 +73,12 @@ struct BookSearchView: View {
 		.navigationTitle("도서 추가")
 		.navigationBarTitleDisplayMode(.inline)
 		.navigationBarBackButtonHidden(false)
-        .onChange(of: viewModel.books) { books in
-        }
-    }
+	}
+	
+	private func loadMoreContent() {
+		guard !viewModel.isLoading else { return }
+		viewModel.searchBooks(query: inputText)
+	}
 }
 
 #Preview {
