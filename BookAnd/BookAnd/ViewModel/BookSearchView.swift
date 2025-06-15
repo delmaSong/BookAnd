@@ -22,6 +22,48 @@ struct BookSearchView: View {
                         viewModel.searchBooks(query: inputText)
                     }
 				}
+			
+			if !viewModel.books.isEmpty {
+				List {
+					ForEach(viewModel.books, id: \.isbn) { book in
+						HStack(spacing: 12) {
+							AsyncImage(url: URL(string: book.coverImageURL)) { phase in
+								switch phase {
+								case .empty:
+									Color.gray
+								case .success(let image):
+									image.resizable()
+										.aspectRatio(contentMode: .fit)
+								case .failure:
+									Color.gray
+								@unknown default:
+									Color.gray
+								}
+							}
+							.frame(width: 60, height: 80)
+							.cornerRadius(4)
+							
+							VStack(alignment: .leading, spacing: 4) {
+								Text(book.title)
+									.font(.headline)
+									.lineLimit(2)
+								
+								Text(book.author)
+									.font(.subheadline)
+									.foregroundColor(.gray)
+								
+								Text(book.publisher)
+									.font(.caption)
+									.foregroundColor(.gray)
+							}
+						}
+						.padding(.vertical, 8)
+					}
+				}
+				.listStyle(PlainListStyle())
+			} else {
+				Spacer()
+			}
 		}
 		.navigationTitle("도서 추가")
 		.navigationBarTitleDisplayMode(.inline)
