@@ -9,7 +9,10 @@ import Foundation
 import Combine
 
 protocol BookRepository {
-    func searchBooks(query: String, maxResults: Int) -> AnyPublisher<[Book], NetworkError>
+	func searchBooks(
+		query: String,
+		currentPage: Int
+	) -> AnyPublisher<[Book], NetworkError>
     func featchBookDetail(isbn: String) -> AnyPublisher<Book, NetworkError>
 }
 
@@ -20,8 +23,11 @@ final class AladinBookRepository: BookRepository {
 		self.networkService = networkService
 	}
 	
-	func searchBooks(query: String, maxResults: Int) -> AnyPublisher<[Book], NetworkError> {
-		let endpoint = AladinBookEndpoint.search(query: query, maxResults: maxResults)
+	func searchBooks(query: String, currentPage: Int) -> AnyPublisher<[Book], NetworkError> {
+		let endpoint = AladinBookEndpoint.search(
+			query: query,
+			currentPage: currentPage
+		)
 		return networkService.request(endpoint)
 			.map { (response: BookResponse) in
 				return response.books
