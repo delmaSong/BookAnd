@@ -45,4 +45,22 @@ struct Book: Equatable, Codable {
 		self.categoryName = try container.decode(String.self, forKey: .categoryName)
 		self.categories = self.categoryName.components(separatedBy: ">")
 	}
+	
+	init(
+		isbn: String,
+		title: String,
+		publisher: String,
+		author: String,
+		coverImageURL: String,
+		categoryName: String,
+		categories: [String]
+	) {
+		self.isbn = isbn
+		self.title = title
+		self.publisher = publisher
+		self.author = author
+		self.coverImageURL = coverImageURL
+		self.categoryName = categoryName
+		self.categories = categories
+	}
 }
