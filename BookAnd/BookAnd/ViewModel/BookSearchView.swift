@@ -26,7 +26,7 @@ struct BookSearchView: View {
 			if !viewModel.books.isEmpty {
 				List {
 					ForEach(viewModel.books, id: \.isbn) { book in
-						NavigationLink(destination: BookView()) {
+						NavigationLink(destination: BookView(book: book)) {
 							HStack(spacing: 12) {
 								AsyncImage(url: URL(string: book.coverImageURL)) { phase in
 									switch phase {
