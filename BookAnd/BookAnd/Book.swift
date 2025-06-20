@@ -17,7 +17,7 @@ struct BookResponse: Codable {
 
 struct Book: Equatable, Codable {
 	/// 도서 정보 구분짓는 유일키
-	let isbn13: String
+	let isbn: String
 	let title: String
 	let publisher: String
 	let author: String
@@ -29,7 +29,7 @@ struct Book: Equatable, Codable {
 		case title
 		case publisher
 		case author
-		case isbn13
+		case isbn
 		case coverImageURL = "cover"
 		case categoryName
 	}
@@ -37,7 +37,7 @@ struct Book: Equatable, Codable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		
-		self.isbn13 = try container.decode(String.self, forKey: .isbn13)
+		self.isbn = try container.decode(String.self, forKey: .isbn)
 		self.title = try container.decode(String.self, forKey: .title)
 		self.publisher = try container.decode(String.self, forKey: .publisher)
 		self.author = try container.decode(String.self, forKey: .author)

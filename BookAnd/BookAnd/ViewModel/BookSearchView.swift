@@ -14,33 +14,71 @@ struct BookSearchView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            Spacer()
             TextField("제목, 저자, 출판사 등을 입력하세요", text: $inputText)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
-            
-            Button {
-                if !inputText.isEmpty {
-                    viewModel.searchBooks(query: inputText)
-                }
-            } label: {
-                Text("검색")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding(.horizontal)
-            
-            Spacer()
-        }
+                .onSubmit {
+                    if !inputText.isEmpty {
+                        viewModel.searchBooks(query: inputText)
+                    }
+				}
+			
+			if !viewModel.books.isEmpty {
+				List {
+					ForEach(viewModel.books, id: \.isbn) { book in
+						HStack(spacing: 12) {
+							AsyncImage(url: URL(string: book.coverImageURL)) { phase in
+								switch phase {
+								case .empty:
+									Color.gray
+								case .success(let image):
+									image.resizable()
+										.aspectRatio(contentMode: .fit)
+								case .failure:
+									Color.gray
+								@unknown default:
+									Color.gray
+								}
+							}
+							.frame(width: 60, height: 80)
+							.cornerRadius(4)
+							
+							VStack(alignment: .leading, spacing: 4) {
+								Text(book.title)
+									.font(.headline)
+									.lineLimit(2)
+								
+								Text(book.author)
+									.font(.subheadline)
+									.foregroundColor(.gray)
+								
+								Text(book.publisher)
+									.font(.caption)
+									.foregroundColor(.gray)
+							}
+						}
+						.padding(.vertical, 8)
+					}
+				}
+				.listStyle(PlainListStyle())
+				.onAppear {
+					if let _ = viewModel.books.last {
+						loadMoreContent()
+					}
+				}
+			} else {
+				Spacer()
+			}
+		}
 		.navigationTitle("도서 추가")
 		.navigationBarTitleDisplayMode(.inline)
 		.navigationBarBackButtonHidden(false)
-        .onChange(of: viewModel.books) { books in
-        }
-    }
+	}
+	
+	private func loadMoreContent() {
+		guard !viewModel.isLoading else { return }
+		viewModel.searchBooks(query: inputText)
+	}
 }
 
 #Preview {
